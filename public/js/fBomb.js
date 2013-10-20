@@ -29,7 +29,7 @@ var retreiveBombs = function() {
       marker = new google.maps.Marker({
         position: latlng,
         title: text,
-        icon: '/img/fBomb.gif?'+ random,
+        icon: '/img/fbomb.gif?'+ random,
         optimized: false
       });
       marker.setMap(map);
