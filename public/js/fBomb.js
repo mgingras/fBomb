@@ -25,9 +25,6 @@ var retreiveBombs = function() {
   $.get("data", function(tweets) {
     var numBombs = tweets.length;
     for(var i = 0; i < numBombs; i++){
-      if(tweets[i].text == "" || tweets[i].text == null){
-        console.log(tweets[i].text);
-      }
       if($.inArray(tweets[i].id, bombs) < 0){
         mapBomb(tweets[i].text, tweets[i].coordinates[0], tweets[i].coordinates[1]);
         bombs.push(tweets[i].id);
