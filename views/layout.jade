@@ -1,19 +1,35 @@
 doctype 5
-html
+html(lang="en")
   head
     title= title
+    meta(charset="utf-8")
     meta(author="Martin Gingras")
     meta(description="See where in the world the FBomb is being dropped!")
     meta(name="keywords", content="FBomb,Twitter,Fuck,Map,TwitterMap,Tweetmap,Martin Gingras,Martin,Gingras")
-    link(rel="icon", type="image/ico", href="/img/favicon.ico")
+    meta(property="og:image", content="/img/fBomb.png")
+    
+    //- Apple meta tags
+    meta(name="apple-mobile-web-app-capable", content="yes" )
+    meta(name="viewport", id="vp", content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width")
+    meta(name="viewport", id="vp6", content="initial-scale=1.0,user-scalable=no,maximum-scale=1",  media="(device-height: 568px)")
+    link(rel="apple-touch-icon", href="/img/fBomb.png")
+    link(rel="apple-touch-icon-precomposed", href="/img/fBomb.png")
+    
+    // Stylesheets
     link(rel="shortcut icon", href="/img/favicon.ico")
     link(rel='stylesheet', href='/css/bootstrap.min.css')
     link(rel='stylesheet', href='/css/bootstrap-theme.min.css')
     link(rel='stylesheet', href='/css/style.css')
+    
+    // Scripts
     script(src="http://code.jquery.com/jquery-2.0.3.min.js")
     script(src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBR7u3qGNezNqWNqF3CW-2A07lexQ7EtI0")
     script(src='/js/fBomb.min.js')
     script(src='//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js')
+     
+     // Icons
+     link(rel="icon", type="image/ico", href="/img/favicon.ico")
+     link(rel='shortcut icon', href='img/favicon.ico')
      
   body
     block content
