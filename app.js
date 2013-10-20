@@ -8,9 +8,12 @@ routes = require('./routes'),
 http = require('http'),
 path = require('path'),
 util = require('util'),
-twitter = require('twitter');
+twitter = require('twitter'),
+compressor = require('node-minify');
 
 var app = express();
+
+
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -22,6 +25,16 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Mini-me
+new compressor.minify({
+  type: 'uglifyjs',
+  fileIn: 'assets/js/fBomb.js',
+  fileOut: 'public/js/fBomb.min.js',
+  callback: function(err){
+    if(err) console.log("minify: " + err);
+  }
+});
 
 // development only configuration
 app.configure('development', function(){

@@ -8,6 +8,7 @@
   "dependencies": {
     "express": "3.4.2",
     "jade": "*",
-    "twitter" :"0.2.3" 
+    "twitter" :"0.2.3" ,
+    "node-minify": ">=0.7.5"
   }
 }
