@@ -1,0 +1,31 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+/* GOOGLE MAPS SHIT*/
+#map-canvas {
+  height: 100%;
+  position: absolute; 
+  top: 0; 
+  bottom: -200px; 
+  left: 0; 
+  right: 0; 
+  z-index: 0;
+}
+#title-bar {
+   z-index:100;
+   position:relative;
+   color:#fff;"
+}
+#title-close {
+  color:#fff;
+  opacity:1;
+  
+}
+#title-close:hover {
+  opacity:.5;
+}

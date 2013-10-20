@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  //- Fixed navbar
+  .navbar.navbar-inverse.navbar-fixed-bottom
+    .container
+      .navbar-header
+        button.navbar-toggle(type="button",data-toggle="collapse", data-target=".navbar-collapse")
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        h3(style="color:#fff;") FBomb
+        //-  <a class="navbar-brand" href="#">Bootstrap theme</a> 
+      .navbar-collapse.collapse(style="padding-top:8px;")
+        ul.nav.navbar-nav
+          li
+            a(href="#about") About
+          li
+            a(href="#contact") Contact
+  
+      div(style="padding-top:15px;")
+        ul.nav.navbar-nav.navbar-right
+          li
+            small(style="color:white;") created by: 
+              a(href="http://mgingras.ca") Martin Gingras
+  #title-bar.alert.alert-dismissable.navbar-inverse.navbar-brand
+    button#title-close.close(type="button", data-dismiss="alert", aria-hidden="true") &times;
+    <strong>FBomb!</strong> <small style="color:#999">See where in the world the Fbomb is being dropped!!</small>
+  #map-canvas
+    
+    
