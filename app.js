@@ -42,20 +42,27 @@ var twit = new twitter({
     access_token_secret: process.env.oauth_token_secret
 });
 twit.stream('statuses/filter', {track:'fuck'}, function(stream) {
+  var id = 0;
     stream.on('data', function(data) {
       if(data.geo){
         // data.geo.coordinates is an []
         // console.log(data.text + " : " + data.geo.coordinates);
-        tweets.push({text: data.text, coordinates: data.geo.coordinates});
+        tweets.push({text: data.text, coordinates: data.geo.coordinates, id:id++});
       }
     });
 });
 
-getData = function(callback){
+getTweets = function(callback){
   // console.log(tweets);
   callback(tweets);
+}
+
+var eraseTweets = function(){
+  console.log("Erasing tweets");
   tweets = [];
 }
+
+setInterval(eraseTweets, 10000);
 
 
 app.get('/', routes.index);

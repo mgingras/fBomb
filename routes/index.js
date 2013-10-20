@@ -8,10 +8,9 @@ exports.index = function(req, res){
 };
 
 exports.data = function(req, res){
-  getData(function(data){
-    if(data){
-      // console.log(data);
-      res.send(data);
+  getTweets(function(tweets){
+    if(tweets){
+      res.send(tweets);
     }
   });
 };
