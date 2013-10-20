@@ -40,7 +40,7 @@ var mapBomb = function(text, lat, lng){
   var zoom = map.getZoom();
   var random = Math.random() * 100000;
   var bombGif = '/img/fbomb.gif?';
-  var signPost = '/img/signPost.png?';
+  var signPost = '/img/signPost.png';
   var bomb = new google.maps.Marker({
     // position: new google.maps.LatLng(lat - 10, lng + 1),
     position: new google.maps.LatLng(lat, lng),
@@ -53,7 +53,7 @@ var mapBomb = function(text, lat, lng){
   var marker = new google.maps.Marker({
     position: new google.maps.LatLng(lat, lng),
     title: text,
-    icon: signPost + random,
+    icon: signPost,
     raiseOnDrag: false,
     draggable:false,
     animation: google.maps.Animation.DROP
