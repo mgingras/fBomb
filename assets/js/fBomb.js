@@ -18,7 +18,7 @@ $(document).ready(function() {
 });
 
 $(function() {
-  return setInterval(retreiveBombs, 500); // Retreive more every 10 seconds
+  return setInterval(retreiveBombs, 1000); // Retreive more every second
 });
 
 var retreiveBombs = function() {
@@ -66,8 +66,6 @@ var mapBomb = function(text, lat, lng){
       marker.setMap(map);
     }, 2500);
 }
-
-
 
   var lastOpenInfoWin = null;
   function createInfoWindow(marker, text) {
