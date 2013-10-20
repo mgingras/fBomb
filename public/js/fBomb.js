@@ -25,10 +25,11 @@ var retreiveBombs = function() {
     for (var i = 0; i < data.length; i++) {
       text = data[i].text;
       latlng = new google.maps.LatLng(data[i].coordinates[0], data[i].coordinates[1]);
+      var random = Math.random() * 100000;
       marker = new google.maps.Marker({
         position: latlng,
         title: text,
-        icon: '/img/fBomb.gif?'+data[i].coordinates[0]+data[i].coordinates[1],
+        icon: '/img/fBomb.gif?'+ random,
         optimized: false
       });
       marker.setMap(map);
