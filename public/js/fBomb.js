@@ -40,11 +40,15 @@ var mapBomb = function(text, lat, lng){
     title: text,
     icon: '/img/fbomb.gif?'+ random,
     optimized: false,
+    draggable:true,
     map: map
   });
   var marker = new google.maps.Marker({
     position: new google.maps.LatLng(lat, lng),
     title: text,
+    icon: '/img/signPost.png?'+ random,
+    optimized: false,
     map: map
   }); 
+
 }
