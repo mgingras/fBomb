@@ -3,13 +3,14 @@
  * Module dependencies.
  */
 
-var express = require('express'),
-routes = require('./routes'),
-http = require('http'),
-path = require('path'),
-util = require('util'),
-twitter = require('twitter'),
-compressor = require('node-minify');
+var express = require('express')
+, routes = require('./routes')
+, newrelic = require('newrelic')
+, http = require('http')
+, path = require('path')
+, util = require('util')
+, twitter = require('twitter')
+, compressor = require('node-minify');
 
 var app = express();
 

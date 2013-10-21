@@ -9,6 +9,7 @@
     "express": "3.4.2",
     "jade": "*",
     "twitter" :"0.2.3" ,
-    "node-minify": ">=0.7.5"
+    "node-minify": ">=0.7.5",
+    "newrelic" : ">=0.12.1"
   }
 }
