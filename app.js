@@ -35,6 +35,14 @@ new compressor.minify({
     if(err) console.log("minify: " + err);
   }
 });
+new compressor.minify({
+  type: 'uglifyjs',
+  fileIn: 'assets/js/add2home.js',
+  fileOut: 'public/js/add2home.min.js',
+  callback: function(err){
+    if(err) console.log("minify: " + err);
+  }
+});
 
 // development only configuration
 app.configure('development', function(){
