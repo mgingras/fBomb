@@ -10,11 +10,17 @@ var express = require('express')
 , path = require('path')
 , util = require('util')
 , twitter = require('twitter')
-, compressor = require('node-minify');
+, compressor = require('node-minify')
+, grunt = require('grunt');
+
+// grunt.task.init = function() {};
+grunt.loadNpmTasks('grunt-contrib-coffee');
+grunt.tasks([],{}, function() {
+  grunt.log.ok('Done running tasks.');
+});
+
 
 var app = express();
-
-
 
 // all environments
 app.set('port', process.env.PORT || 3000);

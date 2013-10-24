@@ -10,6 +10,8 @@
     "jade": "*",
     "twitter" :"0.2.3" ,
     "node-minify": ">=0.7.5",
-    "newrelic" : ">=0.12.1"
+    "newrelic" : ">=0.12.1",
+    "grunt" : "0.4.1",
+    "grunt-contrib-coffee" : "0.7.0"
   }
 }

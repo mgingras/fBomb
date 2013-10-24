@@ -1,93 +1,89 @@
-var map;
-var bombs = [];
+(function() {
+  var bombs, createInfoWindow, map, mapBomb, retreiveBombs;
 
+  map = null;
 
-$(document).ready(function() {
-  var mapOptions;
-  mapOptions = void 0;
-  mapOptions = {
-    zoom: 2,
-    center: new google.maps.LatLng(5,-30),
-    mapTypeId: google.maps.MapTypeId.ROADMAP,
-    zoomControl: true,
-    // disableDoubleClickZoom: true,
-    // scrollwheel: false,
-    disableDefaultUI: true
+  bombs = [];
+
+  $(document).ready(function() {
+    return alert("Ready");
+  });
+
+  $(document).ready(function() {
+    var mapOptions;
+    mapOptions = {
+      zoom: 2,
+      center: new google.maps.LatLng(5, -30),
+      zoomControl: true,
+      disableDefaultUI: true
+    };
+    return map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+  });
+
+  retreiveBombs = function() {
+    return $.get("data", function(tweets) {
+      var tweet, _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = tweets.length; _i < _len; _i++) {
+        tweet = tweets[_i];
+        if ($.inArray(tweet.id, bombs) < 0) {
+          mapBomb(tweet.text, tweet.coordinates);
+          _results.push(bombs.push(tweet.id));
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
+    });
   };
-  return map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-});
 
-$(function() {
-  return setInterval(retreiveBombs, 1000); // Retreive more every second
-});
+  $(function() {
+    return setInterval(retreiveBombs, 1000);
+  });
 
-var retreiveBombs = function() {
-  $.get("data", function(tweets) {
-    var numBombs = tweets.length;
-    for(var i = 0; i < numBombs; i++){
-      if($.inArray(tweets[i].id, bombs) < 0){
-        mapBomb(tweets[i].text, tweets[i].coordinates[0], tweets[i].coordinates[1]);
-        bombs.push(tweets[i].id);
-      }
-      else{
-      }
-    }
-    
-  });
-};
-var mapBomb = function(text, lat, lng){
-  // var latlng, marker, text, numBombs, rest;
-  var zoom = map.getZoom();
-  var random = Math.random() * 100000;
-  var bombGif = '/img/fbomb.gif?';
-  var signPost = '/img/signPost.png';
-  var bomb = new google.maps.Marker({
-    // position: new google.maps.LatLng(lat - 10, lng + 1),
-    position: new google.maps.LatLng(lat, lng),
-    icon: bombGif + random,
-    optimized: false,
-    draggable:false,
-    zIndex:10,
-    map: map
-  });
-  var marker = new google.maps.Marker({
-    position: new google.maps.LatLng(lat, lng),
-    title: text,
-    icon: signPost,
-    raiseOnDrag: false,
-    draggable:false,
-    animation: google.maps.Animation.DROP
-  });
-  
-    // create the tooltip
+  mapBomb = function(text, coords) {
+    var bomb, bombGif, lat, lng, marker, random, signPost;
+    lat = coords[0];
+    lng = coords[1];
+    random = Math.random() * 100000;
+    bombGif = '/img/fbomb.gif?';
+    signPost = '/img/signPost.png';
+    bomb = new google.maps.Marker({
+      position: new google.maps.LatLng(lat, lng),
+      icon: bombGif + random,
+      optimized: false,
+      raiseOnDrag: false,
+      draggable: false,
+      map: map
+    });
+    marker = new google.maps.Marker({
+      position: new google.maps.LatLng(lat, lng),
+      icon: signPost,
+      raiseOnDrag: false,
+      draggable: false,
+      animation: google.maps.Animation.DROP
+    });
     createInfoWindow(marker, text);
-    setTimeout(function(){
+    return setTimeout(function() {
       bomb.setMap(null);
-      marker.setMap(map);
+      return marker.setMap(map);
     }, 2500);
-}
+  };
 
-  var lastOpenInfoWin = null;
-  function createInfoWindow(marker, text) {
-    //create an infowindow for this marker
-    var infowindow = new google.maps.InfoWindow({
-      content: text,
-      maxWidth:150
+  createInfoWindow = function(marker, text) {
+    var infoWindow;
+    infoWindow = new google.maps.InfoWindow({
+      context: text,
+      maxWidth: 150
     });
-    //open infowindo on click event on marker.
-    google.maps.event.addListener(marker, 'click', function() {
-      if(lastOpenInfoWin) lastOpenInfoWin.close();
-      lastOpenInfoWin = infowindow;
-      infowindow.open(marker.get('map'), marker);
+    return google.maps.event.addListener(marker, 'click', function() {
+      var lastOpenInfoWin;
+      if (lastOpenInfoWin) {
+        lastOpenInfoWin.close();
+      }
+      lastOpenInfoWin = infoWindow;
+      return infoWindow.open(marker.get('map', marker));
     });
-  }
-  
-  //ANAL
-  
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  };
 
-  ga('create', 'UA-42796191-4', 'fbomb.co');
-  ga('send', 'pageview');
+}).call(this);
