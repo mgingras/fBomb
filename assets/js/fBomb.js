@@ -6,10 +6,6 @@
   bombs = [];
 
   $(document).ready(function() {
-    return alert("Ready");
-  });
-
-  $(document).ready(function() {
     var mapOptions;
     mapOptions = {
       zoom: 2,

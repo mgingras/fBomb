@@ -2,8 +2,6 @@ map = null
 bombs = []
 
 $(document).ready ->
-  alert "Ready"
-$(document).ready ->
   mapOptions = {
   zoom: 2,
   center: new google.maps.LatLng(5, -30),
