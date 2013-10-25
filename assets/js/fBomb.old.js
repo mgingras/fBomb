@@ -29,10 +29,7 @@ var retreiveBombs = function() {
         mapBomb(tweets[i].text, tweets[i].coordinates);
         bombs.push(tweets[i].id);
       }
-      else{
-      }
     }
-    
   });
 };
 var mapBomb = function(text, coords){
