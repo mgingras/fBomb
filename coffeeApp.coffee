@@ -59,9 +59,23 @@ twit = new twitter {
 twit.stream 'statuses/filter', {track:'fuck'}, (stream) ->
   id = 0
   stream.on 'data', (data) ->
-    if data.geo
-      tweets.push {text: data.text, coordinates: data.geo.coordinates, id:id++}
-      
+    if data.coordinates
+      tweets.push {text: data.text, coordinates: data.coordinates.coordinates, id:id++}
+    else if data.place
+      if data.place.bounding_box.type is 'Point'
+        tweets.push {text: data.text, coordinates: data.coordinates.coordinates, id:id++}
+        placeTweet {text: data.text, coordinates: data.coordinates.coordinates, id:id++}
+      else if data.place.bounding_box.type is 'Polygon'
+        tweets.push {text: data.text, coordinates: centerPoint(data.place.bounding_box.coordinates[0]), id:id++}
+
+centerPoint = (coords) ->
+  centerPointX = 0
+  centerPointY = 0
+  for coord in coords
+    centerPointX += coord[0]
+    centerPointY += coord[1]
+  return [centerPointX / coords.length, centerPointY / coords.length]
+
 `getTweets = function() {return tweets;}`
 
 eraseTweets = ->

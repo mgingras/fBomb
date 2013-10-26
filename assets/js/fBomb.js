@@ -27,6 +27,7 @@
       for (_i = 0, _len = tweets.length; _i < _len; _i++) {
         tweet = tweets[_i];
         if ($.inArray(tweet.id, bombs) < 0) {
+          console.log(tweet);
           mapBomb(tweet.text, tweet.coordinates);
           _results.push(bombs.push(tweet.id));
         } else {
@@ -39,8 +40,8 @@
 
   mapBomb = function(text, coords) {
     var bomb, bombGif, lat, lng, marker, random, signPost;
-    lat = coords[0];
-    lng = coords[1];
+    lat = coords[1];
+    lng = coords[0];
     random = Math.random() * 100000;
     bombGif = '/img/fbomb.gif?';
     signPost = '/img/signPost.png';

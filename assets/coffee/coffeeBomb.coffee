@@ -20,8 +20,8 @@ retreiveBombs = ->
         bombs.push tweet.id
 
 mapBomb = (text, coords) ->
-  lat = coords[0]
-  lng = coords[1]
+  lat = coords[1]
+  lng = coords[0]
   random = Math.random() * 100000
   bombGif = '/img/fbomb.gif?'
   signPost = '/img/signPost.png'
