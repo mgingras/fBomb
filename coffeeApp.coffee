@@ -8,12 +8,15 @@ twitter = require 'twitter'
 compressor = require 'node-minify'
 grunt = require 'grunt'
 
+# Grunt task
 grunt.loadNpmTasks 'grunt-contrib-coffee'
 grunt.tasks [], {}, ->
   grunt.log.ok "Grunt: Done running tasks!"
 
-app = express();
+# Expres
+app = express()
 
+# Configs
 app.set 'port', process.env.PORT || 3000
 app.set 'views', path.join __dirname, 'views'
 app.set 'view engine', 'jade'
@@ -21,11 +24,9 @@ app.use express.logger 'dev'
 app.use express.bodyParser()
 app.use express.methodOverride()
 app.use app.router
-
-# Issue Here:
 app.use express.static(path.join(__dirname, "public"))
-# 
 
+# Minify
 new compressor.minify {
   type: 'uglifyjs',
   fileIn: 'assets/js/fBomb.js',
@@ -61,7 +62,7 @@ twit.stream 'statuses/filter', {track:'fuck'}, (stream) ->
     if data.geo
       tweets.push {text: data.text, coordinates: data.geo.coordinates, id:id++}
       
-geoTweets = (callback) -> callback(tweets)
+`getTweets = function() {return tweets;}`
 
 eraseTweets = ->
   console.log("Erasing Tweets")
