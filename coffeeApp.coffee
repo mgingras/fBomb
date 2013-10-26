@@ -55,18 +55,22 @@ twit = new twitter {
   access_token_key: process.env.oauth_token,
   access_token_secret: process.env.oauth_token_secret
 }
-
+poly = 1
+placePoint = 1
+coordPoint= 1
 twit.stream 'statuses/filter', {track:'fuck'}, (stream) ->
   id = 0
   stream.on 'data', (data) ->
     text = "@" + data.user.screen_name + " : " + data.text
     if data.coordinates
       tweets.push {text: text, coordinates: data.coordinates.coordinates, id:id++}
+      console.log "Coordinates: " + coordPoint++
     else if data.place
       if data.place.bounding_box.type is 'Point'
-        tweets.push {text: text, coordinates: data.coordinates.coordinates, id:id++}
-        placeTweet {text: text, coordinates: data.coordinates.coordinates, id:id++}
+        console.log "Point: " + placePoint++
+        tweets.push {text: text, coordinates: data.place.bounding_box.coordinates, id:id++}
       else if data.place.bounding_box.type is 'Polygon'
+        console.log "Polygon: " + poly++
         tweets.push {text: text, coordinates: centerPoint(data.place.bounding_box.coordinates[0]), id:id++}
 
 centerPoint = (coords) ->
