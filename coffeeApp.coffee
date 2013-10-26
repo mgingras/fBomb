@@ -61,7 +61,10 @@ coordPoint= 1
 twit.stream 'statuses/filter', {track:'fuck'}, (stream) ->
   id = 0
   stream.on 'data', (data) ->
-    text = "@" + data.user.screen_name + " : " + data.text
+    if data.user.screen_name
+      text = "@" + data.user.screen_name + " : " + data.text
+    else
+      text = data.text
     if data.coordinates
       tweets.push {text: text, coordinates: data.coordinates.coordinates, id:id++}
       console.log "Coordinates: " + coordPoint++
