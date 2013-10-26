@@ -59,14 +59,15 @@ twit = new twitter {
 twit.stream 'statuses/filter', {track:'fuck'}, (stream) ->
   id = 0
   stream.on 'data', (data) ->
+    text = "@" + data.user.screen_name + " : " + data.text
     if data.coordinates
-      tweets.push {text: data.text, coordinates: data.coordinates.coordinates, id:id++}
+      tweets.push {text: text, coordinates: data.coordinates.coordinates, id:id++}
     else if data.place
       if data.place.bounding_box.type is 'Point'
-        tweets.push {text: data.text, coordinates: data.coordinates.coordinates, id:id++}
-        placeTweet {text: data.text, coordinates: data.coordinates.coordinates, id:id++}
+        tweets.push {text: text, coordinates: data.coordinates.coordinates, id:id++}
+        placeTweet {text: text, coordinates: data.coordinates.coordinates, id:id++}
       else if data.place.bounding_box.type is 'Polygon'
-        tweets.push {text: data.text, coordinates: centerPoint(data.place.bounding_box.coordinates[0]), id:id++}
+        tweets.push {text: text, coordinates: centerPoint(data.place.bounding_box.coordinates[0]), id:id++}
 
 centerPoint = (coords) ->
   centerPointX = 0
