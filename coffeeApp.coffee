@@ -61,27 +61,28 @@ twit.stream 'statuses/filter', {track:'fuck'}, (stream) ->
   id = 0
   stream.on 'data', (data) ->
     # fs.writeFile 'data.log', util.inspect(data)
-    # fs.writeFile 'user.log', util.inspect(data.user)
-    # fs.writeFile 'screenName.log', util.inspect(data.user.screen_name)
     if data.coordinates
       # fs.writeFile 'coordinates.log', util.inspect(data.coordinates)
       tweets.push {text: "@" + data.user.screen_name + " : " + data.text, coordinates: data.coordinates.coordinates, id:id++}
     else if data.place
       # fs.writeFile 'place.log', util.inspect(data.place)
       if data.place.bounding_box
-        # fs.writeFile 'boundingBox.log', util.inspect(data.place.bounding_box)
+        fs.writeFile 'boundingBox.log', util.inspect(data.place.bounding_box)
         if data.place.bounding_box.type is 'Polygon'
-          tweets.push {text: "@" + data.user.screen_name + " : " + data.text, coordinates: centerPoint(data.place.bounding_box.coordinates[0]), id:id++}
-        # else
-        #   fs.writeFile 'wtfPlace.log', util.inspect(data.place)
+          console.log data.text + util.inspect data.place
+          centerPoint data.place.bounding_box.coordinates[0], (center) ->
+            tweets.push {text: "@" + data.user.screen_name + " : " + data.text, coordinates: center, id:id++}
+        else
+          console.log 'WTF_Place: ' + util.inspect(data.place)
+          # fs.writeFile 'wtfPlace.log', util.inspect(data.place)
 
-centerPoint = (coords) ->
+centerPoint = (coords, callback) ->
   centerPointX = 0
   centerPointY = 0
   for coord in coords
     centerPointX += coord[0]
     centerPointY += coord[1]
-  return [centerPointX / coords.length, centerPointY / coords.length]
+  callback [centerPointX / coords.length, centerPointY / coords.length]
 
 `getTweets = function() {return tweets;}`
 
