@@ -7,6 +7,7 @@ util = require 'util'
 twitter = require 'twitter'
 compressor = require 'node-minify'
 grunt = require 'grunt'
+# fs = require 'fs'
 
 # Grunt task
 grunt.loadNpmTasks 'grunt-contrib-coffee'
@@ -55,26 +56,24 @@ twit = new twitter {
   access_token_key: process.env.oauth_token,
   access_token_secret: process.env.oauth_token_secret
 }
-poly = 1
-placePoint = 1
-coordPoint= 1
+
 twit.stream 'statuses/filter', {track:'fuck'}, (stream) ->
   id = 0
   stream.on 'data', (data) ->
-    if data.user.screen_name
-      text = "@" + data.user.screen_name + " : " + data.text
-    else
-      text = data.text
+    # fs.writeFile 'data.log', util.inspect(data)
+    # fs.writeFile 'user.log', util.inspect(data.user)
+    # fs.writeFile 'screenName.log', util.inspect(data.user.screen_name)
     if data.coordinates
-      tweets.push {text: text, coordinates: data.coordinates.coordinates, id:id++}
-      console.log "Coordinates: " + coordPoint++
+      # fs.writeFile 'coordinates.log', util.inspect(data.coordinates)
+      tweets.push {text: "@" + data.user.screen_name + " : " + data.text, coordinates: data.coordinates.coordinates, id:id++}
     else if data.place
-      if data.place.bounding_box.type is 'Point'
-        console.log "Point: " + placePoint++
-        tweets.push {text: text, coordinates: data.place.bounding_box.coordinates, id:id++}
-      else if data.place.bounding_box.type is 'Polygon'
-        console.log "Polygon: " + poly++
-        tweets.push {text: text, coordinates: centerPoint(data.place.bounding_box.coordinates[0]), id:id++}
+      # fs.writeFile 'place.log', util.inspect(data.place)
+      if data.place.bounding_box
+        # fs.writeFile 'boundingBox.log', util.inspect(data.place.bounding_box)
+        if data.place.bounding_box.type is 'Polygon'
+          tweets.push {text: "@" + data.user.screen_name + " : " + data.text, coordinates: centerPoint(data.place.bounding_box.coordinates[0]), id:id++}
+        # else
+        #   fs.writeFile 'wtfPlace.log', util.inspect(data.place)
 
 centerPoint = (coords) ->
   centerPointX = 0
