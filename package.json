@@ -8,7 +8,7 @@
   "dependencies": {
     "express": "3.4.2",
     "jade": "*",
-    "twitter" :"0.2.3" ,
+    "twit" : "1.1.11",
     "node-minify": ">=0.7.5",
     "newrelic" : ">=0.12.1",
     "grunt" : "0.4.1",

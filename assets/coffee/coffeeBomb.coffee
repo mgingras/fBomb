@@ -16,7 +16,6 @@ retreiveBombs = ->
   $.get "data", (tweets) ->
     for tweet in tweets
       if $.inArray(tweet.id, bombs) < 0
-        console.log tweet
         mapBomb tweet.text, tweet.coordinates
         bombs.push tweet.id
 

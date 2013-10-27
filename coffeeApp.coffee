@@ -4,10 +4,9 @@ newrelic = require 'newrelic'
 http = require 'http'
 path = require 'path'
 util = require 'util'
-twitter = require 'twitter'
 compressor = require 'node-minify'
 grunt = require 'grunt'
-# fs = require 'fs'
+twit = require 'twit'
 
 # Grunt task
 grunt.loadNpmTasks 'grunt-contrib-coffee'
@@ -47,34 +46,39 @@ app.configure 'development', ->
 # Prod config
 app.configure 'production', ->
   app.use express.errorHandler()
-
-tweets = []
-
-twit = new twitter {
+  
+Twitter = new twit {
   consumer_key: process.env.consumer_key,
   consumer_secret: process.env.consumer_secret,
-  access_token_key: process.env.oauth_token,
+  access_token: process.env.oauth_token,
   access_token_secret: process.env.oauth_token_secret
 }
 
-twit.stream 'statuses/filter', {track:'fuck'}, (stream) ->
-  id = 0
-  stream.on 'data', (data) ->
-    # fs.writeFile 'data.log', util.inspect(data)
-    if data.coordinates
-      # fs.writeFile 'coordinates.log', util.inspect(data.coordinates)
-      tweets.push {text: "@" + data.user.screen_name + " : " + data.text, coordinates: data.coordinates.coordinates, id:id++}
-    else if data.place
-      # fs.writeFile 'place.log', util.inspect(data.place)
-      if data.place.bounding_box
-        fs.writeFile 'boundingBox.log', util.inspect(data.place.bounding_box)
-        if data.place.bounding_box.type is 'Polygon'
-          console.log data.text + util.inspect data.place
-          centerPoint data.place.bounding_box.coordinates[0], (center) ->
-            tweets.push {text: "@" + data.user.screen_name + " : " + data.text, coordinates: center, id:id++}
-        else
-          console.log 'WTF_Place: ' + util.inspect(data.place)
-          # fs.writeFile 'wtfPlace.log', util.inspect(data.place)
+# Temporary storage of tweets
+tweets = []
+# Clears cache of tweets
+setInterval eraseTweets, 5000
+eraseTweets = -> tweets = []
+# Returns tweets to client
+`getTweets = function() {return tweets;}`
+
+stream = Twitter.stream 'statuses/filter', {track:'fuck'}
+
+id = 0
+stream.on 'tweet', (tweet) ->
+  if tweet.coordinates
+    tweets.push {text: "@" + tweet.user.screen_name + " : " + tweet.text, coordinates: tweet.coordinates.coordinates, id:id++}
+    retweet tweet.user.screen_name, tweet.id_str
+  else if tweet.place
+    if tweet.place.bounding_box
+      if tweet.place.bounding_box.type is 'Polygon'
+        centerPoint tweet.place.bounding_box.coordinates[0], (center) ->
+          tweets.push {text: "@" + tweet.user.screen_name + " : " + tweet.text, coordinates: center, id:id++}
+          retweet tweet.user.screen_name, tweet.id_str
+      else
+        console.log 'WTF_Place: ' + util.inspect tweet.place
+    else
+      console.log 'placeWithNoBoundingBox' + util.inspect tweet.place
 
 centerPoint = (coords, callback) ->
   centerPointX = 0
@@ -84,13 +88,30 @@ centerPoint = (coords, callback) ->
     centerPointY += coord[1]
   callback [centerPointX / coords.length, centerPointY / coords.length]
 
-`getTweets = function() {return tweets;}`
 
-eraseTweets = ->
-  console.log("Erasing Tweets")
-  tweets = []
 
-setInterval eraseTweets, 5000
+# Array of re-tweeted screen_names
+twitterUsernameArray = []
+# 350 per hour, 50 per min, we'll do 45 so we avoid hitting the limit
+limit = 0
+setInterval resetLimit, 60000
+resetLimit = -> limit = 0
+
+
+
+retweet = (screen_name, tweetID) ->
+  if limit is 0
+    return
+  else limit--
+  if twitterUsernameArray[screen_name]
+    console.log screen_name + " found!"
+  else #if screen_name is "martin_gingras"
+    Twitter.post 'statuses/retweet/:id', { id: tweetID }, (err) ->
+      if err
+       console.log err
+      else
+        twitterUsernameArray[screen_name] = screen_name
+
 
 # Routes
 app.get '/', routes.index
