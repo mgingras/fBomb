@@ -93,9 +93,9 @@ centerPoint = (coords, callback) ->
 # Array of re-tweeted screen_names
 twitterUsernameArray = []
 # 350 per hour, 50 per min, we'll do 45 so we avoid hitting the limit
-limit = 0
+limit = 25
 setInterval resetLimit, 60000
-resetLimit = -> limit = 0
+resetLimit = -> limit = 25
 
 
 
