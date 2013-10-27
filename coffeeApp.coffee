@@ -97,3 +97,7 @@ app.get '/data', routes.data
 
 http.createServer(app).listen app.get('port'), ->
   console.log 'Express server listening on port ' + app.get 'port'
+
+process.on 'uncaughtException', (err) ->
+    console.log 'Uncaught Error!!! : ' + err
+
