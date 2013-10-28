@@ -47,8 +47,6 @@ app.configure 'development', ->
 app.configure 'production', ->
   app.use express.errorHandler()
 
-
-
 Twitter = new twit {
   consumer_key: process.env.consumer_key,
   consumer_secret: process.env.consumer_secret,
@@ -59,9 +57,8 @@ Twitter = new twit {
 # Temporary storage of tweets
 tweets = []
 
+# Clears cache of tweets every 5 seconds
 eraseTweets = -> tweets = []
-
-# Clears cache of tweets
 setInterval eraseTweets, 5000
 
 # Returns tweets to client
@@ -70,6 +67,7 @@ setInterval eraseTweets, 5000
 stream = Twitter.stream 'statuses/filter', {track:'fuck'}
 
 id = 0
+# Logic to get tweets
 stream.on 'tweet', (tweet) ->
   if tweet.coordinates
     tweets.push {text: "@" + tweet.user.screen_name + " : " + tweet.text, coordinates: tweet.coordinates.coordinates, id:id++}
@@ -81,10 +79,11 @@ stream.on 'tweet', (tweet) ->
           tweets.push {text: "@" + tweet.user.screen_name + " : " + tweet.text, coordinates: center, id:id++}
           retweet tweet.user.screen_name, tweet.id_str
       else
-        # console.log 'WTF_Place: ' + util.inspect tweet.place
+        console.log 'WTF_Place: ' + util.inspect tweet.place
     else
-      # console.log 'placeWithNoBoundingBox' + util.inspect tweet.place
+      console.log 'placeWithNoBoundingBox' + util.inspect tweet.place
 
+# Calculate the center of a bounding box for tweet
 centerPoint = (coords, callback) ->
   centerPointX = 0
   centerPointY = 0
@@ -95,23 +94,23 @@ centerPoint = (coords, callback) ->
 
 
 
-# Array of re-tweeted screen_names
+# Array of re-tweeted screen_names to avoid spam
 twitterUsernameArray = []
 
-# 350 per hour, 50 per min, we'll do 45 so we avoid hitting the limit
 limit = 1
 
+# Reset the limit of retweets every 20 seconds
 resetLimit = -> limit = 1
+setInterval resetLimit, 20000
 
-setInterval resetLimit, 30000
-
+# Retweet logic
 retweet = (screen_name, tweetID) ->
   if limit is 0
     return
   else limit--
   if twitterUsernameArray[screen_name]
-    console.log screen_name + " found!"
-  else #if screen_name is "martin_gingras"
+    console.log screen_name + " already retweeted!"
+  else
     Twitter.post 'statuses/retweet/:id', { id: tweetID }, (err) ->
       if err
        console.log err
