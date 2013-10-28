@@ -46,7 +46,9 @@ app.configure 'development', ->
 # Prod config
 app.configure 'production', ->
   app.use express.errorHandler()
-  
+
+
+
 Twitter = new twit {
   consumer_key: process.env.consumer_key,
   consumer_secret: process.env.consumer_secret,
@@ -56,9 +58,12 @@ Twitter = new twit {
 
 # Temporary storage of tweets
 tweets = []
+
+eraseTweets = -> tweets = []
+
 # Clears cache of tweets
 setInterval eraseTweets, 5000
-eraseTweets = -> tweets = []
+
 # Returns tweets to client
 `getTweets = function() {return tweets;}`
 
@@ -92,13 +97,13 @@ centerPoint = (coords, callback) ->
 
 # Array of re-tweeted screen_names
 twitterUsernameArray = []
+
 # 350 per hour, 50 per min, we'll do 45 so we avoid hitting the limit
 limit = 1
 
-setInterval resetLimit, 30000
 resetLimit = -> limit = 1
 
-
+setInterval resetLimit, 30000
 
 retweet = (screen_name, tweetID) ->
   if limit is 0
@@ -123,4 +128,3 @@ http.createServer(app).listen app.get('port'), ->
 
 process.on 'uncaughtException', (err) ->
     console.log 'Uncaught Error!!! : ' + err
-
