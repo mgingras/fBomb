@@ -99,9 +99,9 @@ twitterUsernameArray = []
 
 limit = 1
 
-# Reset the limit of retweets every 20 seconds
+# Reset the limit of retweets every 5 minutes
 resetLimit = -> limit = 1
-setInterval resetLimit, 20000
+setInterval resetLimit, 300000
 
 # Retweet logic
 retweet = (screen_name, tweetID) ->
