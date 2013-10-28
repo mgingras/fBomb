@@ -3,7 +3,7 @@ routes = require './routes'
 newrelic = require 'newrelic'
 http = require 'http'
 path = require 'path'
-# util = require 'util'
+util = require 'util'
 compressor = require 'node-minify'
 grunt = require 'grunt'
 twit = require 'twit'
@@ -83,6 +83,24 @@ stream.on 'tweet', (tweet) ->
     else
       console.log 'placeWithNoBoundingBox' + util.inspect tweet.place
 
+stream.on 'limit', (limitMessage) ->
+  console.log "mgingras (limit): "
+  console.log limitMessage
+stream.on 'warning', (warning) ->
+  console.log "mgingras (warning): "
+  console.log warning
+stream.on 'disconnect', (disconnectMessage) ->
+  console.log "mgingras (disconnect): "
+  console.log disconnectMessage
+stream.on 'reconnect', (req, res, connectInterval) ->
+  console.log "mgingras (reconnect): "
+  console.log "Reqeuest: "
+  console.log req
+  console.log "Response: "
+  console.log res
+  console.log "Connection Interval: "
+  console.log connectInterval
+  
 # Calculate the center of a bounding box for tweet
 centerPoint = (coords, callback) ->
   centerPointX = 0
@@ -113,7 +131,8 @@ retweet = (screen_name, tweetID) ->
   else
     Twitter.post 'statuses/retweet/:id', { id: tweetID }, (err) ->
       if err
-       console.log err
+        console.log "mgingras (Retweet Error): "
+        console.log err
       else
         twitterUsernameArray[screen_name] = screen_name
 
