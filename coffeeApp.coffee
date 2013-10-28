@@ -3,7 +3,7 @@ routes = require './routes'
 newrelic = require 'newrelic'
 http = require 'http'
 path = require 'path'
-util = require 'util'
+# util = require 'util'
 compressor = require 'node-minify'
 grunt = require 'grunt'
 twit = require 'twit'
@@ -76,9 +76,9 @@ stream.on 'tweet', (tweet) ->
           tweets.push {text: "@" + tweet.user.screen_name + " : " + tweet.text, coordinates: center, id:id++}
           retweet tweet.user.screen_name, tweet.id_str
       else
-        console.log 'WTF_Place: ' + util.inspect tweet.place
+        # console.log 'WTF_Place: ' + util.inspect tweet.place
     else
-      console.log 'placeWithNoBoundingBox' + util.inspect tweet.place
+      # console.log 'placeWithNoBoundingBox' + util.inspect tweet.place
 
 centerPoint = (coords, callback) ->
   centerPointX = 0
@@ -93,9 +93,10 @@ centerPoint = (coords, callback) ->
 # Array of re-tweeted screen_names
 twitterUsernameArray = []
 # 350 per hour, 50 per min, we'll do 45 so we avoid hitting the limit
-limit = 25
-setInterval resetLimit, 60000
-resetLimit = -> limit = 25
+limit = 1
+
+setInterval resetLimit, 30000
+resetLimit = -> limit = 1
 
 
 
