@@ -11,6 +11,8 @@ $(document).ready ->
   map = new google.maps.Map document.getElementById("map-canvas"), mapOptions
 
 $ -> setInterval retreiveBombs, 1000
+eraseBombs = -> bombs= []
+$ -> setInterval eraseBombs, 10000
 
 retreiveBombs = -> 
   $.get "data", (tweets) ->

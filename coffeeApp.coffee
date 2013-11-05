@@ -64,6 +64,8 @@ setInterval eraseTweets, 5000
 # Returns tweets to client
 `getTweets = function() {return tweets;}`
 
+
+
 stream = Twitter.stream 'statuses/filter', {track:'fuck'}
 
 id = 0
@@ -123,18 +125,17 @@ setInterval resetLimit, 300000
 
 # Retweet logic
 retweet = (screen_name, tweetID) ->
-  if limit is 0
-    return
-  else limit--
-  if twitterUsernameArray[screen_name]
-    console.log screen_name + " already retweeted!"
-  else
-    Twitter.post 'statuses/retweet/:id', { id: tweetID }, (err) ->
-      if err
-        console.log "mgingras (Retweet Error): "
-        console.log err
-      else
-        twitterUsernameArray[screen_name] = screen_name
+  if limit isnt 0
+    limit--
+    if twitterUsernameArray[screen_name]
+      console.log screen_name + " already retweeted!"
+    else
+      Twitter.post 'statuses/retweet/:id', { id: tweetID }, (err) ->
+        if err
+          console.log "mgingras (Retweet Error): "
+          console.log err
+        else
+          twitterUsernameArray[screen_name] = screen_name
 
 
 # Routes
