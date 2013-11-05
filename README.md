@@ -1,7 +1,7 @@
 fBomb
 =====
 
-Mapping the fBomb
+See where in the world the fBomb was dropped
 
 Installation
 -----
