@@ -29,20 +29,3 @@ a {
 #title-close:hover {
   opacity:.5;
 }
-/*.tooltip{
-  border:thin 1px #eee;
-  background-color:#FFFBF0;
-  padding:5px;
-  width:200px;
-  z-index:100;
-}
-
-.tooltipold { position:absolute;
-  width: 145px;
-  padding: 5px;
-  border: 1px solid gray;
-  font-size: 9pt;
-  font-family: Verdana;
-  background-color: #fff;
-  color: #000;
-}*/

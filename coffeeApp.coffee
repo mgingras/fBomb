@@ -34,6 +34,13 @@ new compressor.minify {
   callback: (err) ->  if err
     console.log 'minify: ' + err
   }
+new compressor.minify {
+  type: 'yui-css',
+  fileIn: 'public/css/add2home.css',
+  fileOut: 'public/css/add2home.min.css',
+  callback: (err) ->  if err
+    console.log 'minify: ' + err
+  }
   
 # Dev config
 app.configure 'development', ->
