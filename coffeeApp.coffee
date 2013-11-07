@@ -56,6 +56,7 @@ Twitter = new twit {
 
 # Temporary storage of tweets
 tweets = []
+retweets = []
 
 # Clears cache of tweets every 5 seconds
 eraseTweets = -> tweets = []
@@ -73,13 +74,13 @@ id = 0
 stream.on 'tweet', (tweet) ->
   if tweet.coordinates
     tweets.push {text: "@" + tweet.user.screen_name + " : " + tweet.text, coordinates: tweet.coordinates.coordinates, id:id++}
-    retweet tweet.user.screen_name, tweet.id_str
+    retweet tweet.user.screen_name, tweet.id_str, tweet.user.followers_count
   else if tweet.place
     if tweet.place.bounding_box
       if tweet.place.bounding_box.type is 'Polygon'
         centerPoint tweet.place.bounding_box.coordinates[0], (center) ->
           tweets.push {text: "@" + tweet.user.screen_name + " : " + tweet.text, coordinates: center, id:id++}
-          retweet tweet.user.screen_name, tweet.id_str
+          retweet tweet.user.screen_name, tweet.id_str, tweet.user.followers_count
       else
         console.log 'WTF_Place: ' + util.inspect tweet.place
     else
@@ -117,25 +118,34 @@ centerPoint = (coords, callback) ->
 # Array of re-tweeted screen_names to avoid spam
 twitterUsernameArray = []
 
-limit = 1
+limit = 0
 
 # Reset the limit of retweets every 5 minutes
 resetLimit = -> limit = 1
-setInterval resetLimit, 300000
+# setInterval resetLimit, 300000
+setInterval resetLimit, 15000
 
 # Retweet logic
-retweet = (screen_name, tweetID) ->
-  if limit isnt 0
+retweet = (screen_name, tweetID, followers) ->
+  if limit isnt 0 && retweets.length > 0
     limit--
     if twitterUsernameArray[screen_name]
       console.log screen_name + " already retweeted!"
     else
-      Twitter.post 'statuses/retweet/:id', { id: tweetID }, (err) ->
+      mostPopular = 0
+      index = 0
+      for tweet in retweets
+        if tweet.followers >= mostPopular
+          mostPopular = tweet.followers
+          index = _i
+      Twitter.post 'statuses/retweet/:id', { id: retweets[index].tweetID }, (err) ->
         if err
           console.log "mgingras (Retweet Error): "
           console.log err
         else
-          twitterUsernameArray[screen_name] = screen_name
+          twitterUsernameArray[screen_name] = retweets[index].screen_name
+  else
+    retweets.push {screen_name: screen_name, tweetID: tweetID, followers: followers}
 
 
 # Routes
