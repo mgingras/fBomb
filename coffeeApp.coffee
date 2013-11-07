@@ -118,19 +118,19 @@ centerPoint = (coords, callback) ->
 # Array of re-tweeted screen_names to avoid spam
 twitterUsernameArray = []
 
-limit = 0
+limit = 1
 
 # Reset the limit of retweets every 5 minutes
 resetLimit = -> limit = 1
-# setInterval resetLimit, 300000
-setInterval resetLimit, 15000
+# setInterval resetLimit, 20000
+setInterval resetLimit, 300000
 
 # Retweet logic
 retweet = (screen_name, tweetID, followers) ->
   if limit isnt 0 && retweets.length > 0
     limit--
     if twitterUsernameArray[screen_name]
-      console.log screen_name + " already retweeted!"
+      console.log screen_name + " mgingras: Already Retweeted!"
     else
       mostPopular = 0
       index = 0
@@ -144,6 +144,7 @@ retweet = (screen_name, tweetID, followers) ->
           console.log err
         else
           twitterUsernameArray[screen_name] = retweets[index].screen_name
+          retweets = []
   else
     retweets.push {screen_name: screen_name, tweetID: tweetID, followers: followers}
 
