@@ -3,8 +3,8 @@ bombs = []
 
 $(document).ready ->
   mapOptions =
-    zoom: 2
-    center: new google.maps.LatLng(5, -30)
+    zoom: 3
+    center: new google.maps.LatLng(40, -1)
     zoomControl: true
     disableDefaultUI: true
     
