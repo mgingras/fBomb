@@ -64,6 +64,8 @@ Twitter = new twit {
 # Temporary storage of tweets
 tweets = []
 retweets = []
+# Array of re-tweeted screen_names to avoid spam
+retweetedUsers= []
 
 # Clears cache of tweets every 5 seconds
 eraseTweets = -> tweets = []
@@ -120,11 +122,6 @@ centerPoint = (coords, callback) ->
     centerPointY += coord[1]
   callback [centerPointX / coords.length, centerPointY / coords.length]
 
-
-
-# Array of re-tweeted screen_names to avoid spam
-twitterUsernameArray = []
-
 limit = 1
 
 # Reset the limit of retweets every 5 minutes
@@ -135,10 +132,7 @@ setInterval resetLimit, 300000
 # Retweet logic
 retweet = (screen_name, tweetID, followers) ->
   if limit isnt 0 && retweets.length > 0
-    limit--
-    if twitterUsernameArray[screen_name]
-      console.log screen_name + " mgingras: Already Retweeted!"
-    else
+      limit--
       mostPopular = 0
       index = 0
       for tweet in retweets
@@ -150,10 +144,11 @@ retweet = (screen_name, tweetID, followers) ->
           console.log "mgingras (Retweet Error): "
           console.log err
         else
-          twitterUsernameArray[screen_name] = retweets[index].screen_name
+          retweetedUsers.push(screen_name)
           retweets = []
   else
-    retweets.push {screen_name: screen_name, tweetID: tweetID, followers: followers}
+    if retweetedUsers.indexOf screen_name < 0
+      retweets.push {screen_name: screen_name, tweetID: tweetID, followers: followers}
 
 
 # Routes
