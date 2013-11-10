@@ -74,7 +74,7 @@ setInterval eraseTweets, 5000
 
 
 
-stream = Twitter.stream 'statuses/filter', {track:'fuck,fucker,fucking,fucked,fucks', location:'-180,-90,180,90'}
+stream = Twitter.stream 'statuses/filter', {track:'fuck,fucking,fucks'}
 
 id = 0
 # Logic to get tweets
