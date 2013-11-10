@@ -4,7 +4,7 @@
  */
 
 exports.index = function(req, res){
-  res.render('index', { title: 'FBomb' });
+  res.render('index', { title: 'FBomb', api: process.env.gmaps });
 };
 
 exports.data = function(req, res){
