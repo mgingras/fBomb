@@ -20,38 +20,21 @@ block content
             a(href="http://mgingras.ca/coding/fBomb/") About
           li
             a(href="mailto:martin@mgingras.ca?Subject=fBomb", title="FBomb!") Contact
-          li(style="padding-top:15px;")
-            a(href="https://twitter.com/share", class="twitter-share-button", data-url="http://www.fbomb.co", data-text="Live F-Bombs from Twitter on an interactive map!!", data-via="FBomb_co", data-related="martin_gingras") Tweet
-          li(style="padding-top:15px;")
-            div.fb-share-button(data-href="http://www.fbomb.co", data-type="button_count")
         ul.nav.navbar-nav.navbar-right
           li
             small(style="color:white;") created by: 
               a(href="http://mgingras.ca") Martin Gingras
+          li
+           
   #title-bar.alert.alert-dismissable.navbar-inverse.navbar-brand
     button#title-close.close(type="button", data-dismiss="alert", aria-hidden="true") &times;
-    h1 <a href="https://twitter.com/FBomb_co">@FBomb_co </a>
+    h1
+      a(href="http://www.fbomb.co") FBomb.co
     h4 See where in the world the FBomb is being dropped!
     h4 <small>Click a signpost ( <img class="img-responsive"src="/img/signPost.png" style="display:inline;"></img>) for details...</small>
     p <small style="font-size: 70%;">Not seeing your tweets? Check out: <a href="https://t.co/Q5C0aFrN1E">https://t.co/Q5C0aFrN1E</a></small></p>
-    <br>
-    a(href="https://twitter.com/FBomb_co", class="twitter-follow-button", data-show-count="false", data-dnt="true") Follow @FBomb_co
+    
   #map-canvas
   .row.feed
     .col-lg-2.col-lg-offset-10.col-md-2.col-md-offset-10.col-sm-2.col-sm-offset-10
   script(src="https://maps.googleapis.com/maps/api/js?sensor=false&key=" + api)
-  script.
-    // Twitter Follow
-    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-42796191-4', 'fbomb.co');
-    ga('send', 'pageview');
-    
-    //Twitter 
-//    function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
-    
-    //Google Analytics
