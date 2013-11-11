@@ -8,11 +8,11 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name : ['Fbomb.co'],
+  app_name : [process.env.app_name],
   /**
    * Your New Relic license key.
    */
-  license_key : '51f0000fd5e0f088c088c9867073f0f3c524e5cb',
+  license_key : process.env.newrelic_key,
   logging : {
     /**
      * Level at which to log. 'trace' is most useful to New Relic when diagnosing
