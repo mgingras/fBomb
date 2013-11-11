@@ -29,8 +29,8 @@ oauth_token_secret=[Access token secret]
 gmaps=[Google Maps API key]
 newrelic_key=[New Relic API Key]
 app_name=[Application Name]
+track=[Comma separated terms to track]
 ```
-
 
 
 You can then run the app using the following:
@@ -69,16 +69,13 @@ then run the app using:
 
 and browse to localhost:3000
 
-
-#####*Also, please get your own Google Maps API key if you plan to use this extensively and replace line 33 of index.jade.*
-
 Configuration
 ----------
 
-You can now configure what word to follow by modifying one line in coffeeApp.coffee, so that 'fuck' is replaced by whatever you want to track.
+You can now configure what word to follow by modifying the .env file if you went that route or hard coding them into the following line in coffeeApp.coffee, so that 'track:process.env.track' is replaced by a comma separated string of whatever words you want to track.
 
 ```coffee
-stream = Twitter.stream 'statuses/filter', {track:'fuck'}
+stream = Twitter.stream 'statuses/filter', {track:process.env.track}
 ```
 
 Let me know if you have any questions!
