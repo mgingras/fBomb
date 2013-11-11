@@ -26,6 +26,9 @@ consumer_key=[Consumer key]
 consumer_secret=[Consumer Secret]
 oauth_token=[Access token]
 oauth_token_secret=[Access token secret]
+gmaps=[Google Maps API key]
+newrelic_key=[New Relic API Key]
+app_name=[Application Name]
 ```
 
 
@@ -37,8 +40,10 @@ You can then run the app using the following:
 then just browse to localhost:5000 and you should see some fBombs!
 
 
-(Alternatively you can hard code them in coffeeApp.coffee)
+(Alternatively you can hard code them in wherever they apply)
 
+coffeeApp.coffee
+ 
 ```coffee
 Twitter = new twit {
   consumer_key: [Consumer key]
@@ -47,6 +52,16 @@ Twitter = new twit {
   access_token_secret: [Access token secret]
 }
 ```
+routes/index.js
+```js
+  res.render('index', { title: 'FBomb', api: process.env.gmaps });
+````
+newrelic.js
+```js
+  app_name : [process.env.app_name],
+  //...
+  license_key : process.env.newrelic_key,
+````
 
 then run the app using:
 
