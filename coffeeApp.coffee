@@ -83,13 +83,11 @@ id = 0
 stream.on 'tweet', (tweet) ->
   if tweet.coordinates
     tweets.push {text: "@" + tweet.user.screen_name + " : " + tweet.text, coordinates: tweet.coordinates.coordinates, id:id++}
-    retweet tweet.user.screen_name, tweet.id_str, tweet.user.followers_count
   else if tweet.place
     if tweet.place.bounding_box
       if tweet.place.bounding_box.type is 'Polygon'
         centerPoint tweet.place.bounding_box.coordinates[0], (center) ->
           tweets.push {text: "@" + tweet.user.screen_name + " : " + tweet.text, coordinates: center, id:id++}
-          retweet tweet.user.screen_name, tweet.id_str, tweet.user.followers_count
       else
         console.log 'WTF_Place: ' + util.inspect tweet.place
     else
@@ -121,35 +119,6 @@ centerPoint = (coords, callback) ->
     centerPointX += coord[0]
     centerPointY += coord[1]
   callback [centerPointX / coords.length, centerPointY / coords.length]
-
-limit = 1
-
-# Reset the limit of retweets every 5 minutes
-resetLimit = -> limit = 1
-# setInterval resetLimit, 20000
-setInterval resetLimit, 300000
-
-# Retweet logic
-retweet = (screen_name, tweetID, followers) ->
-  if limit isnt 0 && retweets.length > 0
-      limit--
-      mostPopular = 0
-      index = 0
-      for tweet in retweets
-        if tweet.followers >= mostPopular
-          mostPopular = tweet.followers
-          index = _i
-      Twitter.post 'statuses/retweet/:id', { id: retweets[index].tweetID }, (err) ->
-        if err
-          console.log "mgingras (Retweet Error): "
-          console.log err
-        else
-          retweetedUsers.push(screen_name)
-          retweets = []
-  else
-    if retweetedUsers.indexOf screen_name < 0
-      retweets.push {screen_name: screen_name, tweetID: tweetID, followers: followers}
-
 
 # Routes
 app.get '/', routes.index
