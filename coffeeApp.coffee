@@ -17,14 +17,14 @@ grunt.tasks [], {}, ->
 app = express()
 
 # Configs
-app.set 'port', process.env.PORT || 3000
-app.set 'views', path.join __dirname, 'views'
-app.set 'view engine', 'jade'
-app.use express.logger 'dev'
-app.use express.bodyParser()
-app.use express.methodOverride()
-app.use app.router
-app.use express.static(path.join(__dirname, "public"))
+app.configure ->
+  app.set 'port', process.env.PORT || 3000
+  app.set 'views', path.join __dirname, 'views'
+  app.set 'view engine', 'jade'
+  app.use express.bodyParser()
+  app.use express.methodOverride()
+  app.use app.router
+  app.use express.static(path.join(__dirname, "public"))
 
 # Minify
 new compressor.minify {
@@ -44,6 +44,7 @@ new compressor.minify {
   
 # Dev config
 app.configure 'development', ->
+  app.use express.logger 'dev'
   app.use express.errorHandler {
     dumpExceptions: true,
     showStack: true
@@ -52,6 +53,7 @@ app.configure 'development', ->
   
 # Prod config
 app.configure 'production', ->
+  app.use express.logger()
   app.use express.errorHandler()
 
 Twitter = new twit {
