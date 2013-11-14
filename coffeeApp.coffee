@@ -1,6 +1,5 @@
 express = require 'express'
 routes = require './routes'
-newrelic = require 'newrelic'
 http = require 'http'
 path = require 'path'
 util = require 'util'
