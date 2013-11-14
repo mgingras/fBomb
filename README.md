@@ -17,6 +17,9 @@ To set up your own version of this app, all you have to do is clone this repo an
    $ npm install
 ```
 
+###Configuration
+####Heroku toolbelt - Foreman
+
 I use foreman to populate the environment variables with the API keys, feel free to use whatever works for you to get them in your environment.
 
 To do so, using foreman configure the ".env" file in the project's root directory with credentials from [https://dev.twitter.com](https://dev.twitter.com) and Google's API.
@@ -39,7 +42,9 @@ You can then run the app using the following:
 Then just browse to localhost:5000 and you should see some fBombs drop!
 
 
-(Alternatively you can hard code them in wherever they apply)
+####Hard code API keys
+*You can hard code the values described in the above method wherever they apply (see below)*
+In any of the below files, replace the entire "process.env.[key]" with the relevant data
 
 coffeeApp.coffee
  
