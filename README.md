@@ -17,9 +17,9 @@ To set up your own version of this app, all you have to do is clone this repo an
    $ npm install
 ```
 
-I use foreman to populate the environment variables with the API keys, feel free to use whatever works for you to get them in your environemnt.
+I use foreman to populate the environment variables with the API keys, feel free to use whatever works for you to get them in your environment.
 
-To do so, configure a ".env" file in the project's root directory with credentials from [https://dev.twitter.com](https://dev.twitter.com).
+To do so, using foreman configure the ".env" file in the project's root directory with credentials from [https://dev.twitter.com](https://dev.twitter.com) and Google's API.
 
 ```env
 consumer_key=[Consumer key]
@@ -27,7 +27,6 @@ consumer_secret=[Consumer Secret]
 oauth_token=[Access token]
 oauth_token_secret=[Access token secret]
 gmaps=[Google Maps API key]
-newrelic_key=[New Relic API Key]
 app_name=[Application Name]
 track=[Comma separated terms to track]
 ```
@@ -37,7 +36,7 @@ You can then run the app using the following:
 
 ``` $ foreman start ``` 
 
-then just browse to localhost:5000 and you should see some fBombs!
+Then just browse to localhost:5000 and you should see some fBombs drop!
 
 
 (Alternatively you can hard code them in wherever they apply)
@@ -51,16 +50,15 @@ Twitter = new twit {
   access_token: [Access token]
   access_token_secret: [Access token secret]
 }
+
+...
+
+stream = Twitter.stream 'statuses/filter', {track:process.env.track}
+
 ```
 routes/index.js
 ```js
   res.render('index', { title: 'FBomb', api: process.env.gmaps });
-````
-newrelic.js
-```js
-  app_name : [process.env.app_name],
-  //...
-  license_key : process.env.newrelic_key,
 ````
 
 then run the app using:
@@ -77,6 +75,8 @@ You can now configure what word to follow by modifying the .env file if you went
 ```coffee
 stream = Twitter.stream 'statuses/filter', {track:process.env.track}
 ```
+
+Markers are customizable by replacing the fbomb.gif and signPost.png located in ./public/img/ . 
 
 Let me know if you have any questions!
 
