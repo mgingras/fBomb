@@ -1,6 +1,5 @@
 map = undefined
 bombs = []
-ws = new WebSocket("ws://localhost:5000");
 
 $(document).ready ->
   mapOptions =
@@ -10,11 +9,13 @@ $(document).ready ->
     disableDefaultUI: true
     
   map = new google.maps.Map document.getElementById("map-canvas"), mapOptions
-
-ws.onmessage = (event) ->
-  data = JSON.parse event.data
-  feedTweet data
-  mapBomb data
+  # Configure WebSockets
+  host = location.origin.replace /^http/, 'ws'
+  ws =  new WebSocket host
+  ws.onmessage = (event) ->
+    data = JSON.parse event.data
+    feedTweet data
+    mapBomb data
   
   
 mapBomb = (tweet) ->
