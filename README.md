@@ -3,8 +3,8 @@ fBomb
 
 See where in the world the fBomb was dropped
 
-Installation
------
+###Installation
+---
 
 Fairly basic to set up your own instance of this application.
 
@@ -18,6 +18,8 @@ To set up your own version of this app, all you have to do is clone this repo an
 ```
 
 ###Configuration
+---
+
 For this applicaiton you need to get the API keys for Twitter [https://dev.twitter.com](https://dev.twitter.com) and Google Maps into your environment (or the code), and the App's name and words you want to track. Below are some methods of doing so:
 
 ####Export to Environment
@@ -88,8 +90,8 @@ then run the app using:
 
 and browse to localhost:3000
 
-Configuration
-----------
+####Tracking
+---
 
 You can now configure what word to follow by modifying the .env file if you went that route or hard coding them into the following line in coffeeApp.coffee, so that 'track:process.env.track' is replaced by a comma separated string of whatever words you want to track.
 
@@ -99,6 +101,17 @@ stream = Twitter.stream 'statuses/filter', {track:process.env.track}
 
 Markers are customizable by replacing the fbomb.gif and signPost.png located in ./public/img/ . 
 
+
+####Deployment
+---
+If you want to deploy this app, I suggest Heroku, they have lots of docs to help you out:
+node.js: https://devcenter.heroku.com/articles/getting-started-with-nodejs
+websockets: https://devcenter.heroku.com/articles/node-websockets
+
+
+---
+
 Let me know if you have any questions!
 
+Martin   
 <martin@mgingras.com>
