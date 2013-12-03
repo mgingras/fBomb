@@ -29,3 +29,164 @@ a {
 #title-close:hover {
   opacity:.5;
 }
+.navbar {
+  border:none;
+  width:75%;
+}
+.navbar-collapse {
+  width:75%;
+}
+.tweetTime {
+  color:white;
+  font-size:90%;
+  padding-left:5px;
+  padding-right:0px;
+}
+#menu
+{
+  position:absolute;
+  top:0px;
+  right:0px;
+  height:100%;
+  width:25%;
+  background-color:rgba(0,0,0, 0.7);
+  z-index: 100;
+  position: fixed;
+  overflow:auto;
+}
+.tweetstream {
+  padding:0px;
+  height:100%;
+  width:100%;
+}
+.tweet {
+  height: 100px;
+  width: 100%;
+  border-radius: 10px;
+  float: left;
+}
+.profilePic {
+  height: 50px;
+  width:50px;
+  margin-left:10px;
+}
+
+.text {
+  color:#fff;
+  margin:0px;
+  font-size:10px;
+  padding-left:5px;
+}
+.typeText{
+  font-size:75%;
+}
+
+@media (max-width: 1290px) {
+  .navbar {
+    width:70%;
+  }
+  .navbar-collapse {
+    width:70%;
+  }
+  #menu {
+    width:30%;
+  }
+}
+@media (max-width: 1110px) {
+  .navbar {
+    width:65%;
+  }
+  .navbar-collapse {
+    width:65%;
+  }
+  #menu {
+    width:35%;
+  }
+}
+@media (max-width: 990px) {
+  .navbar {
+    width:60%;
+  }
+  .navbar-collapse {
+    width:60%;
+  }
+  #menu {
+    width:40%;
+  }
+}
+@media (max-width: 900px) {
+  .profilePic{
+    height:30px;
+    width:30px;
+  }
+  #title-bar{
+    width:250px;
+    height:330px;
+  }
+}
+@media (max-width: 790px) {
+  h1{
+    font-size:140%;
+    margin:0px;
+  }
+  h3 {
+    font-size:120%;
+    margin:0px;
+  }
+  hr {
+    margin:5px;
+  }
+  .share {
+    width:15%;
+    height:15%;
+  }
+  .navbar {
+    width:50%;
+  }
+  .navbar-collapse {
+    width:50%;
+  }
+  #menu {
+    width:50%;
+    display:block;
+  }
+  #title-bar{
+    width:250px;
+    height:280px;
+  }
+  .type{
+    width:25px;
+    height:25px;
+  }
+  .typeText{
+    font-size:60%;
+  }
+}
+@media (max-width: 650px) {
+  .navbar {
+    width:100%;
+  }
+  .navbar-collapse {
+    width:100%;
+  }
+  #menu {
+    display:none;
+  }
+}
+@media (max-width: 300px) {
+  h1{
+    font-size:100%;
+  }
+  h4 {
+    font-size:70%;
+  }
+  p {
+    font-size:50%;
+  }
+  #title-bar{
+    width:200px;
+  }
+  .help {
+    display:none;
+  }
+}

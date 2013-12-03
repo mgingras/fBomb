@@ -12,6 +12,7 @@
     "node-minify": ">=0.7.5",
     "grunt" : "0.4.1",
     "grunt-contrib-coffee" : "0.7.0",
-    "coffee-script":"1.6.3 "
+    "coffee-script":"1.6.3 ",
+    "ws" : "0.4.31"
   }
 }
