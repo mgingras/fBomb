@@ -18,11 +18,27 @@ To set up your own version of this app, all you have to do is clone this repo an
 ```
 
 ###Configuration
+For this applicaiton you need to get the API keys for Twitter [https://dev.twitter.com](https://dev.twitter.com) and Google Maps into your environment (or the code), and the App's name and words you want to track. Below are some methods of doing so:
+
+####Export to Environment
+You can set up your unix enivronment to have the necessary information by ```export``` (ing) them into your environment:
+
+```bash
+export consumer_key=[Consumer key] \
+consumer_secret=[Consumer Secret] \
+oauth_token=[Access token] \
+oauth_token_secret=[Access token secret] \
+gmaps=[Google Maps API key] \
+app_name=[Application Name] \
+track=[Comma separated terms to track]
+```
+
+You can then run the application with the following ```$ coffee coffeeApp.coffee``` (this requires coffeeScript installed)
+
+Then just browse to localhost:3000 and you should see some fBombs drop!
+
 ####Heroku toolbelt - Foreman
-
-I use foreman to populate the environment variables with the API keys, feel free to use whatever works for you to get them in your environment.
-
-To do so, using foreman configure the ".env" file in the project's root directory with credentials from [https://dev.twitter.com](https://dev.twitter.com) and Google's API.
+To do so, using Foreman, from Heroku toolbelt, configure a ".env" file in the project's root directory.
 
 ```env
 consumer_key=[Consumer key]
@@ -64,7 +80,7 @@ stream = Twitter.stream 'statuses/filter', {track:process.env.track}
 routes/index.js
 ```js
   res.render('index', { title: 'FBomb', api: process.env.gmaps });
-````
+```
 
 then run the app using:
 
