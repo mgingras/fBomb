@@ -4,5 +4,5 @@
  */
 
 exports.index = function(req, res){
-  res.render('index', { title: 'FBomb', api: process.env.gmaps });
+  res.render('index', { title: process.env.app_name , api: process.env.gmaps });
 };
