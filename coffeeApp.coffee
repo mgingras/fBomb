@@ -62,7 +62,7 @@ app.configure 'production', ->
 server = http.createServer(app).listen app.get('port'), ->
   console.log 'Express server listening on port ' + app.get 'port'
 
-wss = new WebSocketServer({server:server})
+wss = new WebSocketServer {server:server}
 
 wss.on 'connection', (ws) ->
   console.log "connection"
