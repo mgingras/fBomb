@@ -105,7 +105,7 @@ Markers are customizable by replacing the fbomb.gif and signPost.png located in 
 ####Deployment
 ---
 If you want to deploy this app, I suggest Heroku, they have lots of docs to help you out:
-node.js: https://devcenter.heroku.com/articles/getting-started-with-nodejs
+node.js: https://devcenter.heroku.com/articles/getting-started-with-nodejs   
 websockets: https://devcenter.heroku.com/articles/node-websockets
 
 
