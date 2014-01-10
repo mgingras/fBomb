@@ -9,15 +9,15 @@ twit = require 'twit'
 WebSocketServer = require('ws').Server
 
 
-# Grunt task
+# Grunt tasks
 grunt.loadNpmTasks 'grunt-contrib-coffee'
 grunt.tasks [], {}, ->
   grunt.log.ok "Grunt: Done running tasks!"
 
-# Expres
+# Express
 app = express()
 
-# Configs
+# App Config stuff...
 app.configure ->
   app.set 'port', process.env.PORT || 3000
   app.set 'views', path.join __dirname, 'views'
@@ -28,7 +28,7 @@ app.configure ->
   app.use app.router
   app.use express.static(path.join(__dirname, "public"))
 
-# Minify
+# Minify JS and CSS
 new compressor.minify {
   type: 'uglifyjs',
   fileIn: 'assets/js/fBomb.js',
@@ -43,7 +43,7 @@ new compressor.minify {
   callback: (err) ->  if err
     console.log 'minify: ' + err
   }
-  
+
 # Dev config
 app.configure 'development', ->
   app.use express.logger 'dev'
@@ -51,22 +51,24 @@ app.configure 'development', ->
     dumpExceptions: true,
     showStack: true
     }
-  app.locals.pretty = true 
-  
+  app.locals.pretty = true
+
 # Prod config
 app.configure 'production', ->
   app.use express.errorHandler()
   app.use express.logger()
-  
-  
+
+
 server = http.createServer(app).listen app.get('port'), ->
   console.log 'Express server listening on port ' + app.get 'port'
 
+# Configure WebServer for WebSockets
 wss = new WebSocketServer {server:server}
 
 wss.on 'connection', (ws) ->
-  console.log "connection"
+  console.log "WebSocket Connection!"
 
+# Configure Twitter API connection
 Twitter = new twit (
   consumer_key: process.env.consumer_key,
   consumer_secret: process.env.consumer_secret,
@@ -84,32 +86,59 @@ wss.broadcast = (data) ->
     @clients[i].send data
 
 stream = Twitter.stream 'statuses/filter', {track:process.env.track}
-  
-id = 0
-# Logic to get tweets
+
+# Logic to handle tweets
 stream.on 'tweet', (tweet) ->
   retweet tweet.user.screen_name, tweet.id_str, tweet.user.followers_count
-  # console.log tweet
+  tweetData = undefined
   if tweet.coordinates
     if tweet.entities.media
-      # console.log util.inspect tweet.entities.media
-      wss.broadcast JSON.stringify({username: tweet.user.screen_name, name: tweet.user.name, date: tweet.created_at, text: tweet.text, coordinates: tweet.coordinates.coordinates, media_url: tweet.entities.media[0].media_url, profile_img: tweet.user.profile_image_url, id:id++})
+        tweetData =
+          username: tweet.user.screen_name
+          name: tweet.user.name
+          date: tweet.created_at
+          text: tweet.text
+          coordinates: tweet.coordinates.coordinates
+          media_url: tweet.entities.media[0].media_url
+          profile_img: tweet.user.profile_image_url
     else
-      wss.broadcast JSON.stringify({username: tweet.user.screen_name, name: tweet.user.name, date: tweet.created_at, text: tweet.text, coordinates: tweet.coordinates.coordinates, profile_img: tweet.user.profile_image_url, id:id++})
+      tweetData =
+        username: tweet.user.screen_name
+        name: tweet.user.name
+        date: tweet.created_at
+        text: tweet.text
+        coordinates: tweet.coordinates.coordinates
+        profile_img: tweet.user.profile_image_url
+    wss.broadcast JSON.stringify tweetData
   else if tweet.place
     if tweet.place.bounding_box
       if tweet.place.bounding_box.type is 'Polygon'
         centerPoint tweet.place.bounding_box.coordinates[0], (center) ->
           if tweet.entities.media
-          # console.log util.inspect tweet.entities.media
-            wss.broadcast JSON.stringify({username: tweet.user.screen_name, name: tweet.user.name, date: tweet.created_at, text: tweet.text, coordinates: center, media_url: tweet.entities.media[0].media_url, profile_img: tweet.user.profile_image_url, id:id++})
+            tweetData =
+              username: tweet.user.screen_name
+              name: tweet.user.name
+              date: tweet.created_at
+              text: tweet.text
+              coordinates: center
+              media_url: tweet.entities.media[0].media_url
+              profile_img: tweet.user.profile_image_url
           else
-            wss.broadcast JSON.stringify({username: tweet.user.screen_name, name: tweet.user.name, date: tweet.created_at, text: tweet.text, coordinates: center, profile_img: tweet.user.profile_image_url, id:id++})
+            tweetData =
+              username: tweet.user.screen_name
+              name: tweet.user.name
+              date: tweet.created_at
+              text: tweet.text
+              coordinates: center
+              profile_img: tweet.user.profile_image_url
+          wss.broadcast JSON.stringify tweetData
       else
-          console.log 'WTF_Place: ' + util.inspect tweet.place
+        console.log 'WTF Place: ' + util.inspect tweet.place
     else
-      console.log 'placeWithNoBoundingBox' + util.inspect tweet.place
+      console.log 'Place without bounding_box: ' + util.inspect tweet.place
 
+
+# Twitter Limit Handling
 stream.on 'limit', (limitMessage) ->
   console.log "mgingras (limit): "
   console.log limitMessage
@@ -127,7 +156,7 @@ stream.on 'reconnect', (req, res, connectInterval) ->
   console.log res
   console.log "Connection Interval: "
   console.log connectInterval
-  
+
 # Calculate the center of a bounding box for tweet
 centerPoint = (coords, callback) ->
   centerPointX = 0
@@ -137,37 +166,41 @@ centerPoint = (coords, callback) ->
     centerPointY += coord[1]
   callback [centerPointX / coords.length, centerPointY / coords.length]
 
-limit = 1
+
+########### Retweet Stuff ###########
+limit = 0
 
 # Reset the limit of retweets every 10 minutes
-resetLimit = -> limit = 1
-# setInterval resetLimit, 20000
-setInterval resetLimit, 600000
+setInterval ->
+    limit=1
+  , 600000
+
 
 # Retweet logic
 retweet = (screen_name, tweetID, followers) ->
   if limit isnt 0 && retweets.length > 0
-      limit--
-      mostPopular = 0
-      index = 0
-      for tweet in retweets
-        if tweet.followers >= mostPopular
-          mostPopular = tweet.followers
-          index = _i
-      Twitter.post 'statuses/retweet/:id', { id: retweets[index].tweetID }, (err) ->
-        if err
-          console.log "mgingras (Retweet Error): "
-          console.log err
-        else
-          retweetedUsers.push(screen_name)
-          retweets = []
+    limit--
+    mostPopular = 0
+    index = 0
+    for tweet in retweets
+      if tweet.followers >= mostPopular
+        mostPopular = tweet.followers
+        index = _i
+    Twitter.post 'statuses/retweet/:id', { id: retweets[index].tweetID }, (err) ->
+      console.log "mgingras (Retweet Error): " + util.inspect err if err
+      retweetedUsers.push screen_name
+      retweets = []
   else
-    if retweetedUsers.indexOf screen_name < 0
-      retweets.push {screen_name: screen_name, tweetID: tweetID, followers: followers}
-
+    if retweetedUsers.indexOf(screen_name) < 0
+      tweetData =
+        screen_name: screen_name
+        tweetID: tweetID
+        followers: followers
+      retweets.push tweetData
 
 # Routes
 app.get '/', routes.index
 
+# Error handling
 process.on 'uncaughtException', (err) ->
-    console.log 'Uncaught Error!!! : ' + err
+  console.log 'Uncaught Error!!! : ' + err
