@@ -1,1 +1,1 @@
-web: coffee coffeeApp.coffee
+web: coffee app.coffee

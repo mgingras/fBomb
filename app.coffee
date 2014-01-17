@@ -12,7 +12,7 @@ WebSocketServer = require('ws').Server
 # Grunt tasks
 grunt.loadNpmTasks 'grunt-contrib-coffee'
 grunt.tasks [], {}, ->
-  grunt.log.ok "Grunt: Done running tasks!"
+  grunt.log.ok 'Grunt: Done running tasks!'
 
 # Express
 app = express()
@@ -22,11 +22,11 @@ app.configure ->
   app.set 'port', process.env.PORT || 3000
   app.set 'views', path.join __dirname, 'views'
   app.set 'view engine', 'jade'
-  # app.use express.logger 'dev'
-  app.use express.bodyParser()
+  app.use express.json()
+  app.use express.urlencoded()
   app.use express.methodOverride()
   app.use app.router
-  app.use express.static(path.join(__dirname, "public"))
+  app.use express.static(path.join(__dirname, 'public'))
 
 # Minify JS and CSS
 new compressor.minify {
@@ -55,20 +55,21 @@ app.configure 'development', ->
 
 # Prod config
 app.configure 'production', ->
-  app.use express.errorHandler()
   app.use express.logger()
+  app.use express.errorHandler()
 
 
+# Create the http server...
 server = http.createServer(app).listen app.get('port'), ->
   console.log 'Express server listening on port ' + app.get 'port'
 
-# Configure WebServer for WebSockets
+# Configure WebServer for WebSockets, attach it to the server
 wss = new WebSocketServer {server:server}
 
 wss.on 'connection', (ws) ->
-  console.log "WebSocket Connection!"
+  console.log 'WebSocket Connection!'
 
-# Configure Twitter API connection
+# Configure Twitter API connection using API keys from environment
 Twitter = new twit (
   consumer_key: process.env.consumer_key,
   consumer_secret: process.env.consumer_secret,
@@ -81,6 +82,7 @@ retweets = []
 # Array of re-tweeted screen_names to avoid spam
 retweetedUsers= []
 
+
 wss.broadcast = (data) ->
   for i of @clients
     @clients[i].send data
@@ -92,45 +94,27 @@ stream.on 'tweet', (tweet) ->
   retweet tweet.user.screen_name, tweet.id_str, tweet.user.followers_count
   tweetData = undefined
   if tweet.coordinates
-    if tweet.entities.media
-        tweetData =
-          username: tweet.user.screen_name
-          name: tweet.user.name
-          date: tweet.created_at
-          text: tweet.text
-          coordinates: tweet.coordinates.coordinates
-          media_url: tweet.entities.media[0].media_url
-          profile_img: tweet.user.profile_image_url
-    else
-      tweetData =
-        username: tweet.user.screen_name
-        name: tweet.user.name
-        date: tweet.created_at
-        text: tweet.text
-        coordinates: tweet.coordinates.coordinates
-        profile_img: tweet.user.profile_image_url
+    tweetData =
+      username: tweet.user.screen_name
+      name: tweet.user.name
+      date: tweet.created_at
+      text: tweet.text
+      coordinates: tweet.coordinates.coordinates
+      profile_img: tweet.user.profile_image_url
+    tweetData['media_url'] = tweet.entities.media[0].media_url if tweet.entities.media
     wss.broadcast JSON.stringify tweetData
   else if tweet.place
     if tweet.place.bounding_box
       if tweet.place.bounding_box.type is 'Polygon'
         centerPoint tweet.place.bounding_box.coordinates[0], (center) ->
-          if tweet.entities.media
-            tweetData =
-              username: tweet.user.screen_name
-              name: tweet.user.name
-              date: tweet.created_at
-              text: tweet.text
-              coordinates: center
-              media_url: tweet.entities.media[0].media_url
-              profile_img: tweet.user.profile_image_url
-          else
-            tweetData =
+          tweetData =
               username: tweet.user.screen_name
               name: tweet.user.name
               date: tweet.created_at
               text: tweet.text
               coordinates: center
               profile_img: tweet.user.profile_image_url
+          tweetData['media_url'] = tweet.entities.media[0].media_url if tweet.entities.media
           wss.broadcast JSON.stringify tweetData
       else
         console.log 'WTF Place: ' + util.inspect tweet.place
@@ -138,29 +122,23 @@ stream.on 'tweet', (tweet) ->
       console.log 'Place without bounding_box: ' + util.inspect tweet.place
 
 
+
 # Twitter Limit Handling
 stream.on 'limit', (limitMessage) ->
-  console.log "mgingras (limit): "
-  console.log limitMessage
+  console.log 'mgingras (limit): ' + limitMessage.limit.track
 stream.on 'warning', (warning) ->
-  console.log "mgingras (warning): "
-  console.log warning
+  console.log 'mgingras (warning): ' + warning.warning.code + ' : ' + warning.warning.message
 stream.on 'disconnect', (disconnectMessage) ->
-  console.log "mgingras (disconnect): "
-  console.log disconnectMessage
+  console.log 'mgingras (disconnect): ' + disconnectMessage.disconnect.reason +' (code: ' + disconnectMessage.disconnect.code +')'
 stream.on 'reconnect', (req, res, connectInterval) ->
-  console.log "mgingras (reconnect): "
-  console.log "Reqeuest: "
-  console.log req
-  console.log "Response: "
-  console.log res
-  console.log "Connection Interval: "
-  console.log connectInterval
+  console.log 'mgingras (reconnect): '
+  console.log 'Reqeuest: ' + req
+  console.log 'Response: ' + res
+  console.log 'Connection Interval: ' + connectInterval
 
 # Calculate the center of a bounding box for tweet
 centerPoint = (coords, callback) ->
-  centerPointX = 0
-  centerPointY = 0
+  centerPointX = centerPointY = 0
   for coord in coords
     centerPointX += coord[0]
     centerPointY += coord[1]
@@ -187,7 +165,7 @@ retweet = (screen_name, tweetID, followers) ->
         mostPopular = tweet.followers
         index = _i
     Twitter.post 'statuses/retweet/:id', { id: retweets[index].tweetID }, (err) ->
-      console.log "mgingras (Retweet Error): " + util.inspect err if err
+      console.log 'mgingras (Retweet Error): ' + util.inspect err if err
       retweetedUsers.push screen_name
       retweets = []
   else
