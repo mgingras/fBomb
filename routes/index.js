@@ -3,6 +3,7 @@
  * GET home page.
  */
 
+var config = require('../config.json');
 exports.index = function(req, res){
-  res.render('index', { title: process.env.app_name , api: process.env.gmaps });
+  res.render('index', { title: config.app_name , api: config.gmaps });
 };

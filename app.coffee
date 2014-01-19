@@ -7,7 +7,7 @@ compressor = require 'node-minify'
 grunt = require 'grunt'
 twit = require 'twit'
 WebSocketServer = require('ws').Server
-
+config = require './config.json'
 
 # Grunt tasks
 grunt.loadNpmTasks 'grunt-contrib-coffee'
@@ -71,10 +71,10 @@ wss.on 'connection', (ws) ->
 
 # Configure Twitter API connection using API keys from environment
 Twitter = new twit (
-  consumer_key: process.env.consumer_key,
-  consumer_secret: process.env.consumer_secret,
-  access_token: process.env.oauth_token,
-  access_token_secret: process.env.oauth_token_secret
+  consumer_key: config.consumer_key,
+  consumer_secret: config.consumer_secret,
+  access_token: config.oauth_token,
+  access_token_secret: config.oauth_token_secret
 )
 
 # Temporary storage of tweets
@@ -87,7 +87,7 @@ wss.broadcast = (data) ->
   for i of @clients
     @clients[i].send data
 
-stream = Twitter.stream 'statuses/filter', {track:process.env.track}
+stream = Twitter.stream 'statuses/filter', {track: config.track}
 
 # Logic to handle tweets
 stream.on 'tweet', (tweet) ->

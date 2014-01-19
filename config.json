@@ -1,0 +1,9 @@
+{
+  "consumer_key":"CONSUMER_KEY",
+  "consumer_secret":"CONSUMER_SECRET",
+  "oauth_token":"OATH_TOKEN",
+  "oauth_token_secret":"OAUTH_TOKEN_SECRET",
+  "gmaps":"GMAPS_API_KEY",
+  "app_name":"APP_NAME",
+  "track": "[WORDS_TO_TRACK]"
+}
