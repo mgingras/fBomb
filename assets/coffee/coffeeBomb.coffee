@@ -9,6 +9,10 @@ $(document).ready ->
     disableDefaultUI: true
 
   map = new google.maps.Map document.getElementById("map-canvas"), mapOptions
+
+  #Hackey workaround for IE
+  window.location.origin = window.location.protocol + "//" + window.location.hostname + ((if window.location.port then ":" + window.location.port else ""))  unless window.location.origin
+
   # Configure WebSockets
   host = location.origin.replace /^http/, 'ws'
   ws =  new WebSocket host
