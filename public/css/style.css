@@ -9,11 +9,11 @@ a {
 /* GOOGLE MAPS SHIT*/
 #map-canvas {
   height: 100%;
-  position: absolute; 
-  top: 0; 
-  bottom: -200px; 
-  left: 0; 
-  right: 0; 
+  position: absolute;
+  top: 0;
+  bottom: -200px;
+  left: 0;
+  right: 0;
   z-index: 1;
 }
 #title-bar {
@@ -24,7 +24,7 @@ a {
 #title-close {
   color:#fff;
   opacity:1;
-  
+
 }
 #title-close:hover {
   opacity:.5;
@@ -53,6 +53,7 @@ a {
   z-index: 100;
   position: fixed;
   overflow:auto;
+  overflow-x: hidden;
 }
 .tweetstream {
   padding:0px;
@@ -60,7 +61,6 @@ a {
   width:100%;
 }
 .tweet {
-  height: 100px;
   width: 100%;
   border-radius: 10px;
   float: left;
@@ -120,7 +120,7 @@ a {
     width:30px;
   }
   #title-bar{
-    width:250px;
+    width:290px;
     height:330px;
   }
 }
@@ -170,6 +170,9 @@ a {
     width:100%;
   }
   #menu {
+    display:none;
+  }
+  .tMap {
     display:none;
   }
 }

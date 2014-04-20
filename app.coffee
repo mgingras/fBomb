@@ -87,54 +87,56 @@ wss.broadcast = (data) ->
   for i of @clients
     @clients[i].send data
 
-stream = Twitter.stream 'statuses/filter', {track: config.track}
+startStream = ->
+  stream = Twitter.stream 'statuses/filter', {track: config.track}
 
-# Logic to handle tweets
-stream.on 'tweet', (tweet) ->
-  retweet tweet.user.screen_name, tweet.id_str, tweet.user.followers_count
-  tweetData = undefined
-  if tweet.coordinates
-    tweetData =
-      username: tweet.user.screen_name
-      name: tweet.user.name
-      date: tweet.created_at
-      text: tweet.text
-      coordinates: tweet.coordinates.coordinates
-      profile_img: tweet.user.profile_image_url
-    tweetData['media_url'] = tweet.entities.media[0].media_url if tweet.entities.media
-    wss.broadcast JSON.stringify tweetData
-  else if tweet.place
-    if tweet.place.bounding_box
-      if tweet.place.bounding_box.type is 'Polygon'
-        centerPoint tweet.place.bounding_box.coordinates[0], (center) ->
-          tweetData =
-              username: tweet.user.screen_name
-              name: tweet.user.name
-              date: tweet.created_at
-              text: tweet.text
-              coordinates: center
-              profile_img: tweet.user.profile_image_url
-          tweetData['media_url'] = tweet.entities.media[0].media_url if tweet.entities.media
-          wss.broadcast JSON.stringify tweetData
+  # Logic to handle tweets
+  stream.on 'tweet', (tweet) ->
+    retweet tweet.user.screen_name, tweet.id_str, tweet.user.followers_count
+    tweetData = undefined
+    if tweet.coordinates
+      tweetData =
+        username: tweet.user.screen_name
+        name: tweet.user.name
+        date: tweet.created_at
+        text: tweet.text
+        coordinates: tweet.coordinates.coordinates
+        profile_img: tweet.user.profile_image_url
+      tweetData['media_url'] = tweet.entities.media[0].media_url if tweet.entities.media
+      wss.broadcast JSON.stringify tweetData
+    else if tweet.place
+      if tweet.place.bounding_box
+        if tweet.place.bounding_box.type is 'Polygon'
+          centerPoint tweet.place.bounding_box.coordinates[0], (center) ->
+            tweetData =
+                username: tweet.user.screen_name
+                name: tweet.user.name
+                date: tweet.created_at
+                text: tweet.text
+                coordinates: center
+                profile_img: tweet.user.profile_image_url
+            tweetData['media_url'] = tweet.entities.media[0].media_url if tweet.entities.media
+            wss.broadcast JSON.stringify tweetData
+        else
+          console.log 'WTF Place: ' + util.inspect tweet.place
       else
-        console.log 'WTF Place: ' + util.inspect tweet.place
-    else
-      console.log 'Place without bounding_box: ' + util.inspect tweet.place
+        console.log 'Place without bounding_box: ' + util.inspect tweet.place
 
-
-
-# Twitter Limit Handling
-stream.on 'limit', (limitMessage) ->
-  console.log 'mgingras (limit): ' + limitMessage.limit.track
-stream.on 'warning', (warning) ->
-  console.log 'mgingras (warning): ' + warning.warning.code + ' : ' + warning.warning.message
-stream.on 'disconnect', (disconnectMessage) ->
-  console.log 'mgingras (disconnect): ' + disconnectMessage.disconnect.reason +' (code: ' + disconnectMessage.disconnect.code +')'
-stream.on 'reconnect', (req, res, connectInterval) ->
-  console.log 'mgingras (reconnect): '
-  console.log 'Reqeuest: ' + req
-  console.log 'Response: ' + res
-  console.log 'Connection Interval: ' + connectInterval
+  # Twitter Error handling
+  stream.on 'limit', (limitMessage) ->
+    console.log 'mgingras (limit): ' + limitMessage.limit.track
+  stream.on 'warning', (warning) ->
+    console.log 'mgingras (warning): ' + warning.warning.code + ' : ' + warning.warning.message
+  stream.on 'disconnect', (disconnectMessage) ->
+    console.log 'mgingras (disconnect): ' + disconnectMessage.disconnect.reason
+    setTimeout startStream, 5000 # In case of disconnect, wait 5 secs, try to connect again
+  stream.on 'reconnect', (req, res, connectInterval) ->
+    console.log 'mgingras (reconnect): '
+    console.log 'Reqeuest: ' + req
+    console.log 'Response: ' + res
+    console.log 'Connection Interval: ' + connectInterval
+  return
+startStream()
 
 # Calculate the center of a bounding box for tweet
 centerPoint = (coords, callback) ->

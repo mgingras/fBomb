@@ -18,7 +18,6 @@ $(document).ready ->
   ws =  new WebSocket host
   ws.onmessage = (event) ->
     data = JSON.parse event.data
-    feedTweet data
     mapBomb data
 
 
@@ -48,12 +47,14 @@ mapBomb = (tweet) ->
   setTimeout( ->
     bomb.setMap(null)
     marker.setMap(map)
+    createInfoWindow marker, tweet
   , 2500)
+  return
 
 
-feedTweet = (tweet) ->
+feedTweet = (tweet, marker, infoWindow) ->
   text = urlize tweet.text
-  img = '<div class="row"><img style="padding:0px;" src="' + tweet.profile_img + '" class="col-xs-2 img-rounded profilePic"></img>'
+  img = '<div class="row"><img style="padding:0px;" src="' + tweet.profile_img + '" class="col-xs-2 img-circle profilePic"></img>'
   # Time shit
   time = (new Date() - new Date(tweet.date)) / 60000
   hour = Math.floor(time / 60)
@@ -62,9 +63,19 @@ feedTweet = (tweet) ->
   time = '<span class="col-xs-1 col-xs-offset-2 tweetTime">' + time + '</span>'
   username = '<p><strong class="col-xs-4" style="padding-left:5px;padding-right:3px;color:white;">' + tweet.name + '&nbsp;</strong><small class="col-xs-2" style="padding-left:5px;padding-right:0px"><a href="http://twitter.com/' + tweet.username + '">@' + tweet.username + '</a></small>' + time
 
-  HTMLtext =  '<p class="col-xs-10 col-xs-offset-2 text">' + text + '</p>'
-  content = '<div class="tweet">' + img + username + HTMLtext + '</div>'
+
+  HTMLtext =  '<p class="col-xs-10 col-xs-offset-2 text">' + text + '</p></div>'
+  if(tweet.media_url)
+    sharedIMG = '<div class="row"><div class="col-xs-12"><img class="img-responsive" style="padding-top:10px;padding-bottom:10px;width:100%;height:100%;" src="' + tweet.media_url + '"> </div></div>'
+    content = '<div id="' + tweet.id + '"class="tweet">' + img + username + HTMLtext + sharedIMG
+  else
+    content = '<div id="' + tweet.id + '"class="tweet">' + img + username + HTMLtext
+  content += '<hr></div>'
   $(".tweetstream").prepend content
+
+  $("##{tweet.id}").bind "mouseenter", (event) ->
+    google.maps.event.trigger marker, 'click'
+  return
 
 lastOpenInfoWin = null
 createInfoWindow = (marker, tweet) ->
@@ -94,4 +105,6 @@ createInfoWindow = (marker, tweet) ->
     lastOpenInfoWin.close() if lastOpenInfoWin
     lastOpenInfoWin = infoWindow
     infoWindow.open marker.get("map"), marker
+  feedTweet tweet, marker, infoWindow
+  return
 
