@@ -102,6 +102,10 @@ a {
   #menu {
     width:35%;
   }
+  #title-bar{
+    width:400px;
+    height:350;
+  }
 }
 @media (max-width: 990px) {
   .navbar {
@@ -115,13 +119,16 @@ a {
   }
 }
 @media (max-width: 900px) {
+  h4{
+    font-size:15px;
+  }
   .profilePic{
     height:30px;
     width:30px;
   }
   #title-bar{
     width:290px;
-    height:330px;
+    height:360px;
   }
 }
 @media (max-width: 790px) {
@@ -146,13 +153,16 @@ a {
   .navbar-collapse {
     width:50%;
   }
+  .hire{
+    font-size:12px;
+  }
   #menu {
     width:50%;
     display:block;
   }
   #title-bar{
     width:250px;
-    height:280px;
+    height:300px;
   }
   .type{
     width:25px;
