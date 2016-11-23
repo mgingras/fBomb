@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 .env
-=======
 lib-cov
 *.seed
 *.log
@@ -16,8 +14,6 @@ results
 
 npm-debug.log
 node_modules
->>>>>>> 5bbe64a887792e3f2db93b82eebdc684b68bc733
-*.log
 public/js/fBomb.min.js
 assets/js/fBomb.js
 

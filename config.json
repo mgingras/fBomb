@@ -1,9 +1,9 @@
 {
-  "consumer_key":"CONSUMER_KEY",
-  "consumer_secret":"CONSUMER_SECRET",
-  "oauth_token":"OATH_TOKEN",
-  "oauth_token_secret":"OAUTH_TOKEN_SECRET",
-  "gmaps":"GMAPS_API_KEY",
-  "app_name":"APP_NAME",
-  "track": "[WORDS_TO_TRACK]"
+  "consumer_key":"w2n7YgG2N81SjN0LZVkOGiC9Y",
+  "consumer_secret":"f9hsYPAL0x1Bqnt5zMv0AZvazb3RZZqS49YjerFpr82vLsNObY",
+  "oauth_token":"2157915715-3nnAdARKQK4rTsNv4uQrhxYjmWTI0cu1k2RWSea",
+  "oauth_token_secret":"2m6OmYE6HJVkTo78XnrPRRkaHOVLQe0w9B7i1DDnxC1ZR",
+  "gmaps":"AIzaSyBR7u3qGNezNqWNqF3CW",
+  "app_name":"fBomb",
+  "track": "fuck,fucking,fucks"
 }
