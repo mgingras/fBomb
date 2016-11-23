@@ -29,17 +29,18 @@ app.configure ->
   app.use express.static(path.join(__dirname, 'public'))
 
 # Minify JS and CSS
-new compressor.minify {
-  type: 'uglifyjs',
-  fileIn: 'assets/js/fBomb.js',
-  fileOut: 'public/js/fBomb.min.js',
+compressor.minify {
+  compressor: 'uglifyjs',
+  input: 'assets/js/fBomb.js',
+  output: 'public/js/fBomb.min.js',
   callback: (err) ->  if err
     console.log 'minify: ' + err
   }
-new compressor.minify {
-  type: 'yui-css',
-  fileIn: 'public/css/add2home.css',
-  fileOut: 'public/css/add2home.min.css',
+
+compressor.minify {
+  compressor: 'yui-css',
+  input: 'public/css/add2home.css',
+  output: 'public/css/add2home.min.css',
   callback: (err) ->  if err
     console.log 'minify: ' + err
   }

@@ -20,3 +20,5 @@ node_modules
 *.log
 public/js/fBomb.min.js
 assets/js/fBomb.js
+
+config.json
