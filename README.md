@@ -3,7 +3,7 @@ fBomb
 
 See where in the world the fBomb was dropped
 
-###Installation
+### Installation
 ---
 
 Fairly basic to set up your own instance of this application.
@@ -16,7 +16,7 @@ $ git clone https://github.com/mgingras/fBomb.git && cd fBomb && npm install
 
 ```
 
-###Configuration
+### Configuration
 ---
 
 For this applicaiton you need to get the API keys for Twitter [https://dev.twitter.com](https://dev.twitter.com) and Google Maps. These are then inserted into config.json . You can also specify the name you want your applciation to have in this file.
@@ -43,9 +43,9 @@ $ coffee coffeeApp.coffee
 
 If you have configured it correctly you should be able to browse to localhost:3000 and you see some bombs drop!
 
-###Customization
+### Customization
 ---
-####Tracking
+#### Tracking
 To change what is being tracked by the application, replace "[WORDS_TO_TRACK]" in config.json with a comma seperated list of words to track. (e.g. "fuck,fucks,fucking").   
 
 ####Images
@@ -55,13 +55,13 @@ Markers are customizable by replacing 'fbomb.gif' and 'signPost.png' located in 
 'signpost.png' is the marker that drops after the gif animation and stays on the map.
 
 
-###Deployment
+### Deployment
 ---
 If you want to deploy this app, I suggest Heroku, they have lots of docs to help you out:
 node.js: https://devcenter.heroku.com/articles/getting-started-with-nodejs   
 websockets: https://devcenter.heroku.com/articles/node-websockets
 
-###Contact
+### Contact
 ---
 
 Let me know if you have any questions!
