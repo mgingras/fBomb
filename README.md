@@ -48,7 +48,7 @@ If you have configured it correctly you should be able to browse to localhost:30
 #### Tracking
 To change what is being tracked by the application, replace "[WORDS_TO_TRACK]" in config.json with a comma seperated list of words to track. (e.g. "fuck,fucks,fucking").   
 
-####Images
+#### Images
 Markers are customizable by replacing 'fbomb.gif' and 'signPost.png' located in './public/img/'   
 
 'fbomb.gif' is the initail indicator.   
